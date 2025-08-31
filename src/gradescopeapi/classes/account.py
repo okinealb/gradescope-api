@@ -65,6 +65,22 @@ class Account:
         # Get all courses available to the user
         return get_courses_info(soup)
 
+    def get_courses_ids(self, courses: dict) -> dict[str, list[str]]:
+        """
+        Get a list of all course IDs for the user. They are automatically separated into
+        instructor and student courses and sorted by term (most recent first).
+
+        Returns:
+            list: A list of course IDs as strings
+
+        Raises:
+            RuntimeError: If request to account page fails.
+        """
+
+        student_ids = list(courses["student"].keys())
+        instructor_ids = list(courses["instructor"].keys())
+        return {"instructor": instructor_ids, "student": student_ids}
+
     def get_course_users(self, course_id: str) -> list[Member]:
         """
         Get a list of all users in a course
