@@ -34,26 +34,26 @@ def get_courses_info(
             )
         }
     """
-    
+
     # determine if user is exclusively student or instructor
-    if is_both := soup.find("h2", class_="pageHeading", string=user_type) is None:
+    if soup.find("h2", class_="pageHeading", string=user_type) is None:
         # use button text to determine if user is an instructor
         button = soup.find_next("button")
         if button.text == " Create a new course":  # intentional space before Create
             is_instructor = True
         else:
             is_instructor = False
-        
+
         courses = get_courses_info_helper(soup, "", is_instructor)
-        
+
         if is_instructor:
             return {"instructor": courses, "student": {}}
         else:
             return {"instructor": {}, "student": courses}
-            
+
     print("User is both instructor and student")
     courses = {"instructor": {}, "student": {}}
-            
+
     # get instructor courses
     instructor_courses = get_courses_info_helper(soup, "Instructor Courses", True)
     courses["instructor"] = instructor_courses
@@ -61,27 +61,28 @@ def get_courses_info(
     # get student courses
     student_courses = get_courses_info_helper(soup, "Student Courses", True)
     courses["student"] = student_courses
-    
+
     return courses
+
 
 def get_courses_info_helper(
     soup: BeautifulSoup, user_type: str, is_instructor: bool
 ) -> dict[str, Course]:
     """
     Helper function to scrape all course info from the main page of Gradescope.
-    
+
     Args:
         soup (BeautifulSoup): BeautifulSoup object with parsed HTML.
         user_type (str): The user type to scrape courses for (Instructor or Student courses).
         is_instructor (bool): Flag indicating if the user is an instructor or not.
-    
+
     Returns:
         dict: A dictionary mapping course IDs to Course objects containing all course info.
     """
-    
+
     # find heading for defined user_type's courses
     courses = soup.find("h2", class_="pageHeading", string=user_type)
-    
+
     # initalize output variables
     all_courses = {}
 
@@ -145,6 +146,7 @@ def get_courses_info_helper(
             course = course.find_next_sibling("a")
 
     return all_courses
+
 
 def get_course_members(soup: BeautifulSoup, course_id: str) -> list[Member]:
     """
