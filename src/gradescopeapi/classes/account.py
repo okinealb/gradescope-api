@@ -61,9 +61,9 @@ class Account:
             )
 
         soup = BeautifulSoup(response.text, "html.parser")
-        
+
         # Get all courses available to the user
-        return get_courses_info(soup, "Student Courses")
+        return get_courses_info(soup)
 
     def get_course_users(self, course_id: str) -> list[Member]:
         """

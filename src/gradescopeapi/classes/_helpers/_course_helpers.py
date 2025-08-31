@@ -8,7 +8,7 @@ from gradescopeapi.classes.member import Member
 
 
 def get_courses_info(
-    soup: BeautifulSoup, user_type: str
+    soup: BeautifulSoup, user_type: str = "Student Courses"
 ) -> dict[str, dict[str, Course]]:
     """
     Scrape all course info from the main page of Gradescope.
